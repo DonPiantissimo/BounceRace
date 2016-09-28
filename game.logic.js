@@ -143,9 +143,9 @@ game_logic.prototype.check_obstacle_collision = function (player) {
         obstacle_check = this.obstacles[i];
         if (player.ball.pos.x > obstacle_check.hor_min && player.ball.pos.x < obstacle_check.hor_max &&
                 (
-                        ((player.ball.old_pos.y + this.constants.ball_radius <= obstacle_check.bottom) && ((player.ball.pos.y + this.constants.ball_radius) >= obstacle_check.bottom) && (player.ball.ver_speed > 0))
+                        ((player.ball.pos.y <= obstacle_check.bottom) && ((player.ball.pos.y + this.constants.ball_radius) >= obstacle_check.bottom) && (player.ball.ver_speed > 0))
                         ||
-                        ((player.ball.old_pos.y - this.constants.ball_radius >= obstacle_check.top) && ((player.ball.pos.y - this.constants.ball_radius) <= obstacle_check.top) && (player.ball.ver_speed < 0))
+                        ((player.ball.pos.y >= obstacle_check.top) && ((player.ball.pos.y - this.constants.ball_radius) <= obstacle_check.top) && (player.ball.ver_speed < 0))
                         )
                 )
         {
@@ -157,9 +157,9 @@ game_logic.prototype.check_obstacle_collision = function (player) {
 
         if (player.ball.pos.y > obstacle_check.ver_min && player.ball.pos.y < obstacle_check.ver_max &&
                 (
-                        ((player.ball.old_pos.x + this.constants.ball_radius <= obstacle_check.left) && ((player.ball.pos.x + this.constants.ball_radius) >= obstacle_check.left) && (player.ball.hor_speed > 0))
+                        ((player.ball.pos.x <= obstacle_check.left) && ((player.ball.pos.x + this.constants.ball_radius) >= obstacle_check.left) && (player.ball.hor_speed > 0))
                         ||
-                        ((player.ball.old_pos.x - this.constants.ball_radius >= obstacle_check.right) && ((player.ball.pos.x - this.constants.ball_radius) <= obstacle_check.right) && (player.ball.hor_speed < 0))
+                        ((player.ball.old_pos.x >= obstacle_check.right) && ((player.ball.pos.x - this.constants.ball_radius) <= obstacle_check.right) && (player.ball.hor_speed < 0))
                         )
                 )
         {
