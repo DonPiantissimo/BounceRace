@@ -143,7 +143,7 @@ server.create_game = function(player){
         if(thegame) {
 
                 //stop the game updates immediate
-            thegame.gamecore.stop_update();
+            thegame.logic.stop_update();
 
                 //if the game has two players, the one is leaving
             if(thegame.player_count > 1) {
@@ -156,7 +156,7 @@ server.create_game = function(player){
                             //tell them the game is over
                         thegame.player_client.send('s.e');
                             //now look for/create a new game.
-                        this.findGame(thegame.player_client);
+                        this.find_game(thegame.player_client);
                     }
                     
                 } else {
@@ -167,7 +167,7 @@ server.create_game = function(player){
                             //i am no longer hosting, this game is going down
                         thegame.player_host.hosting = false;
                             //now look for/create a new game.
-                        this.findGame(thegame.player_host);
+                        this.find_game(thegame.player_host);
                     }
                 }
             }
@@ -175,10 +175,8 @@ server.create_game = function(player){
             delete this.games[gameid];
             this.game_count--;
 
-            this.log('game removed. there are now ' + this.game_count + ' games' );
+            
 
-        } else {
-            this.log('that game was not found!');
-        }
+        } 
 
     }; //game_server.endGame
