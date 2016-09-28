@@ -566,7 +566,7 @@ game_logic.prototype.__client_correction = function (proc_inputs) {
 
 game_logic.prototype.client_correction = function (proc_inputs) {
     var debug_inc = 0;
-    document.getElementById("scores").innerHTML = 'entered';
+    //document.getElementById("scores").innerHTML = 'entered';
     //document.getElementById("scores").innerHTML = 'debug '+(this.debug_increment++);
     //console.log('debug '+(this.debug_increment++));
     var player = this.players.self, opponent = this.players.other;
@@ -594,7 +594,7 @@ game_logic.prototype.client_correction = function (proc_inputs) {
     if (player.input_log.head)
         player.input_log.head = player.input_log.head.next;
     var dt;
-    //document.getElementById("scores").innerHTML = time_processed +' - '+ Date.now();
+    document.getElementById("scores").innerHTML = time_processed +' - '+ Date.now();
 
     while (input_processing && input_processing.apply_time && input_processing.apply_time.start) {
         dt = this.constants.fps;
