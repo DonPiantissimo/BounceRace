@@ -49,14 +49,14 @@ server.onMessage = function(player, data){
     var message = data.split('=');
     //console.log(parseFloat(message[1]));
     switch(message[0]) {
-        case 'p': var ping = 3*(Date.now() - parseFloat(message[1]));
+        case 'p': var ping = 2*((Date.now() - parseFloat(message[1]))+10);
                 //console.log(this.logic.players.self.ping);
                 
                 if (player.game.logic.server_delay<ping)
                     player.game.logic.server_delay = ping;
             break;
         case 'i':
-                player.game.logic.server_handle_input(player,{angle: parseFloat(message[1]), time: parseFloat(message[2]), seq: parseInt(message[3]), apply_time : 0});
+                player.game.logic.server_handle_input(player,{angle: parseFloat(message[1]), time: parseFloat(message[2]), seq: parseInt(message[3]), apply_time : 0, update_time: parseInt(message[5])});
                 console.log('inputs '+parseFloat(message[2]));
         break;
         
