@@ -820,7 +820,8 @@ game_logic.prototype.client_correction = function (proc_inputs) {
         time_processed += this.ball_step(dt);
     }
     this.ball_step(this.update_time - time_processed);
-	console.log('x dif: '+(player.ball.pos.x-prevposx)+', y dif: '+(player.ball.pos.x-prevposx));
+	 document.getElementById("scores").innerHTML = (player.ball.pos.x-prevposx)+' - '+(player.ball.pos.y-prevposy);
+	console.log('x dif: '+(player.ball.pos.x-prevposx)+', y dif: '+(player.ball.pos.y-prevposy));
     //document.getElementById("scores").innerHTML = player.ball.pos.x + ' - ' + proc_inputs.pos.x + ' | ' + proc_inputs.time + ' - ' + debug_inc;
 };
 
