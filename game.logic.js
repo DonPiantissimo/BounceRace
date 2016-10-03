@@ -386,11 +386,13 @@ game_logic.prototype.apply_input = function (player, input) {
         //player.input_seq.end++;
         //player.input_log[player.input_seq.end] = {angle: player.ball.angle, time: input.time, apply_time: 0, seq: player.input_seq.end, active : false};
         //this.socket.send('i-'+player.input_log.tail.angle+'-'+player.input_log.tail.time+'-'+player.input_log.tail.seq+'-'+player.input_log.tail.apply_time);
+        /*
         var host;
         if (player.host) host = 'h';
         else host = 'c';
         var message_sent = 'i'+'='+ player.ball.arrow.angle + '=' + player.input_log.tail.time + '=' + player.input_log.tail.seq+'='+host;
         this.socket.send(message_sent);
+        */
         //document.getElementById("scores").innerHTML = message_sent;
         this.launch_ball(player);
         player.ball.arrow.active = false;
@@ -440,6 +442,8 @@ game_logic.prototype._physics_update = function (player) {
     player.ball.pos.x += player.ball.hor_speed * dt;
     player.ball.pos.y += player.ball.ver_speed * dt;
     
+
+    
     this.check_obstacle_collision(player);
     //if (Math.abs(player.ball.pos.x)>500 || Math.abs(player.ball.pos.y)>500)
     //    document.getElementById("scores").innerHTML = player.ball.hor_speed + ' ' + player.ball.ver_speed + ' ' + dt;
@@ -471,11 +475,35 @@ game_logic.prototype.physics_update = function () {
     opponent.ball.pos.x += opponent.ball.hor_speed * dt;
     opponent.ball.pos.y += opponent.ball.ver_speed * dt;
     
+    if (this.constants.ball_speed && player.input_log.tail){
+        var host;
+        if (player.host) host = 'h';
+        else host = 'c';
+        var message_sent = 'i'+'='+ player.ball.angle + '=' + player.input_log.tail.time + '=' + player.input_log.tail.seq+'='+host+'='+curdate;
+        this.socket.send(message_sent);   
+        //document.getElementById("scores").innerHTML = 'entered sent';
+    }
     
     this.check_collision();
     
     
 };
+/*
+game_logic.prototype.server_update = function(){
+    this.constants.ball_speed = this.constants.speed;
+    this.launch_ball(this.players.self);
+    this.launch_ball(this.players.other);
+    
+    this.intervalid = setInterval(this.server_physics_update.bind(this),15);
+    this.stopped = false;
+    console.log('entered server_update');
+};
+
+game_logic.prototype.stop_update = function(){
+  clearInterval(this.intervalid);
+  this.stopped = true;
+};
+*/
 
 game_logic.prototype.server_update = function(){
     this.constants.ball_speed = this.constants.speed;
@@ -483,7 +511,7 @@ game_logic.prototype.server_update = function(){
     this.launch_ball(this.players.other);
     
     this.intervalid = setInterval(this.server_physics_update.bind(this),15);
-	this.intervalid2 = setInterval(this.server_send_correction.bind(this),75);
+    this.intervalid2 = setInterval(this.server_send_correction.bind(this),75);
     this.stopped = false;
     console.log('entered server_update');
 };
@@ -528,29 +556,56 @@ game_logic.prototype.server_physics_update = function () {
     if (this.stopped) console.log('stop error');
     var curdate = Date.now() - this.server_delay;
     var dt = curdate - this.update_time;
+    var prev_update_time = this.update_time;
+    var dt1s = 0, dt2s = 0, dt1o = 0, dt2o = 0;
     this.update_time = curdate;
     var selfenter=false, otherenter=false;
     //var curdate = Date.now();
     var old_angle_self = this.players.self.ball.angle;
     var old_angle_other = this.players.other.ball.angle;
+    var old_hor_self = this.players.self.ball.hor_speed;
+    var old_ver_self = this.players.self.ball.ver_speed;
+    var old_hor_other = this.players.other.ball.hor_speed;
+    var old_ver_other = this.players.other.ball.ver_speed;
+    
     if (this.players.self.input_log.head){
-        this.server_angle(this.players.self, curdate);
+        dt1s = this.server_angle(this.players.self, curdate);
         selfenter=true;
     }
     if (this.players.other.input_log.head){
         otherenter=true;
-        this.server_angle(this.players.other, curdate);
+        dt1o = this.server_angle(this.players.other, curdate);
     }
     
+    if (dt1s){
+        dt2s = curdate - dt1s;
+        dt1s = dt1s - prev_update_time;
+        
+        this.players.self.ball.pos.x += old_hor_self * dt1s;
+        this.players.self.ball.pos.y += old_ver_self * dt1s;
+        this.players.self.ball.pos.x += this.players.self.ball.hor_speed * dt2s;
+        this.players.self.ball.pos.y += this.players.self.ball.ver_speed * dt2s;
+        
+    } else {
+        this.players.self.ball.pos.x += this.players.self.ball.hor_speed * dt;
+        this.players.self.ball.pos.y += this.players.self.ball.ver_speed * dt;
+    }
+    
+    if (dt1o){
+        dt2o = curdate - dt1o;
+        dt1o = dt1o - prev_update_time;
+        
+        this.players.other.ball.pos.x += old_hor_other * dt1o;
+        this.players.other.ball.pos.y += old_ver_other * dt1o;
+        this.players.other.ball.pos.x += this.players.other.ball.hor_speed * dt2o;
+        this.players.other.ball.pos.y += this.players.other.ball.ver_speed * dt2o;
+        
+    } else {
+        this.players.other.ball.pos.x += this.players.other.ball.hor_speed * dt;
+        this.players.other.ball.pos.y += this.players.other.ball.ver_speed * dt;
+    }
 
 
-    
-    this.players.self.ball.pos.x += this.players.self.ball.hor_speed * dt;
-    this.players.self.ball.pos.y += this.players.self.ball.ver_speed * dt;
-    
-    this.players.other.ball.pos.x += this.players.other.ball.hor_speed * dt;
-    this.players.other.ball.pos.y += this.players.other.ball.ver_speed * dt;
-    
     if (this.players.self.ball.pos.x>this.constants.field_width/2){
         return this.server_handle_endgame('b');
     }
@@ -612,15 +667,16 @@ game_logic.prototype.server_angle = function (player, time) {
         player.ball.angle = player.input_log.head.angle;
         this.launch_ball(player);
         player.inputs_seq = player.input_log.head.seq;
+        var upd_time = player.input_log.head.update_time;
         player.input_log.head = player.input_log.head.next;
-        return true;
+        return upd_time;
     }
     else {
         if (player.input_log.head)
             console.log('head angle time: '+player.input_log.head.time+', update_time: '+this.update_time);
         else console.log('last head < time, '+headtime+' '+time);
     }
-    return false;
+    return 0;
 };
 
 game_logic.prototype.server_handle_input = function (client, input) {
@@ -752,9 +808,6 @@ game_logic.prototype.client_correction = function (proc_inputs) {
     //console.log('debug '+(this.debug_increment++));
     var player = this.players.self, opponent = this.players.other;
     
-	var prevposx = player.ball.pos.x;
-	var prevposy = player.ball.pos.y;
-	
     player.ball.pos.x = proc_inputs.self.pos.x;
     player.ball.pos.y = proc_inputs.self.pos.y;
     player.ball.angle = proc_inputs.self.angle;
@@ -765,11 +818,13 @@ game_logic.prototype.client_correction = function (proc_inputs) {
     opponent.ball.pos.y = proc_inputs.other.pos.y;
     opponent.ball.angle = opponent.ball.arrow.angle = proc_inputs.other.angle;
     this.launch_ball(opponent);
-    
+
+
     
     while (player.input_log.head && player.input_log.head.seq < proc_inputs.self.seq) {
         player.input_log.head = player.input_log.head.next;
     }
+            
 
     var time_processed = proc_inputs.self.time;
     var input_processing = player.input_log.head;
@@ -784,6 +839,7 @@ game_logic.prototype.client_correction = function (proc_inputs) {
             //document.getElementById("scores").innerHTML = 'debug '+(this.debug_increment++);
 
     //document.getElementById("scores").innerHTML = 'debug '+(this.debug_increment++);
+    
 
     while (input_processing && input_processing.apply_time && input_processing.apply_time.start) {
         dt = this.constants.fps;
@@ -820,12 +876,8 @@ game_logic.prototype.client_correction = function (proc_inputs) {
         time_processed += this.ball_step(dt);
     }
     this.ball_step(this.update_time - time_processed);
-	 document.getElementById("scores").innerHTML = (player.ball.pos.x-prevposx)+' - '+(player.ball.pos.y-prevposy);
-	console.log('x dif: '+(player.ball.pos.x-prevposx)+', y dif: '+(player.ball.pos.y-prevposy));
-//	if (Math.abs(player.ball.pos.x-prevposx)<1.5 && Math.abs(player.ball.pos.y-prevposy)<1.5){
-//		player.ball.pos.x = prevposx; player.ball.pos.y = prevposy;
-//	}
-	//document.getElementById("scores").innerHTML = player.ball.pos.x + ' - ' + proc_inputs.pos.x + ' | ' + proc_inputs.time + ' - ' + debug_inc;
+    document.getElementById("instructions").innerHTML = (this.debug_increment++)+'';
+    //document.getElementById("scores").innerHTML = player.ball.pos.x + ' - ' + proc_inputs.pos.x + ' | ' + proc_inputs.time + ' - ' + debug_inc;
 };
 
 game_logic.prototype._naive_update = function (proc_input) {
