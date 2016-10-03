@@ -767,7 +767,7 @@ game_logic.prototype.client_correction = function (proc_inputs) {
     this.launch_ball(opponent);
     
     
-    while (player.input_log.head.seq < proc_inputs.self.seq) {
+    while (player.input_log.head && player.input_log.head.seq < proc_inputs.self.seq) {
         player.input_log.head = player.input_log.head.next;
     }
 
