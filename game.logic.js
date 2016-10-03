@@ -752,6 +752,9 @@ game_logic.prototype.client_correction = function (proc_inputs) {
     //console.log('debug '+(this.debug_increment++));
     var player = this.players.self, opponent = this.players.other;
     
+	var prevposx = player.ball.pos.x;
+	var prevposy = player.ball.pos.y;
+	
     player.ball.pos.x = proc_inputs.self.pos.x;
     player.ball.pos.y = proc_inputs.self.pos.y;
     player.ball.angle = proc_inputs.self.angle;
@@ -817,6 +820,7 @@ game_logic.prototype.client_correction = function (proc_inputs) {
         time_processed += this.ball_step(dt);
     }
     this.ball_step(this.update_time - time_processed);
+	console.log('x dif: '+(player.ball.pos.x-prevposx)+', y dif: '+(player.ball.pos.x-prevposx));
     //document.getElementById("scores").innerHTML = player.ball.pos.x + ' - ' + proc_inputs.pos.x + ' | ' + proc_inputs.time + ' - ' + debug_inc;
 };
 
