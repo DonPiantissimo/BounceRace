@@ -527,6 +527,8 @@ game_logic.prototype.server_physics_update = function () {
     //console.log('x1: '+this.players.self.ball.pos.x+' x2: '+this.players.other.ball.pos.x);
     if (this.stopped) console.log('stop error');
     var curdate = Date.now() - this.server_delay;
+    var dt = curdate - this.update_time;
+    this.update_time = curdate;
     var selfenter=false, otherenter=false;
     //var curdate = Date.now();
     var old_angle_self = this.players.self.ball.angle;
@@ -541,8 +543,7 @@ game_logic.prototype.server_physics_update = function () {
     }
     
 
-    var dt = curdate - this.update_time;
-    this.update_time = curdate;
+
     
     this.players.self.ball.pos.x += this.players.self.ball.hor_speed * dt;
     this.players.self.ball.pos.y += this.players.self.ball.ver_speed * dt;
