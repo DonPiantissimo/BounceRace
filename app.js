@@ -53,7 +53,7 @@ sio.sockets.on('connection', function(client){
             if(client.game && client.game.id) {
 
                 //player leaving a game should destroy that game
-                //game_server.end_game(client.game.id, client.userid);
+                game_server.end_game(client.game.id, client.userid);
 
             } //client.game_id
 

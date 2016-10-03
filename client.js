@@ -16,28 +16,37 @@ window.onload = function() {
 			y : p_height / 8,
 			rotation : Math.PI/2
 			},
+                other : {
+                        x : -p_width / 2 + 8 * ball_radius,
+			y : -p_height / 8,
+			rotation : Math.PI/2
+			},
 		obstacles : {},
-		height : 480,
+                height : 480,
 		width : 720,
 		obstacle_depth : 10,
+		obstacle_width : 40,
+                obstacle_height : 10,
 		wall_depth : 20,
 		planeWidth : p_width,
 		planeHeight : p_height
 	};
 	
 
-	logic = new game_logic(start);
+	logic = new game_logic();
 	graphics = new game_graphics(start);
 	graphics.create_scene();	
-        //graphics.setObstacles(start.obstacles);
+        graphics.setObstacles(makeObstacles(start));
+        //graphics.setObstaclesOwn();
+        
 	draw();
 
 	
 };
-/*
-function makeObstacles(){
-    var obstacleWidth =40, fieldWidth = 400,fieldHeight=200,     obstacleHeight = 10,
-    obstacleDepth = 10;
+
+function makeObstacles(start){
+    var obstacleWidth = start.obstacle_width, fieldWidth = start.planeWidth,fieldHeight=start.planeHeight,     obstacleHeight = start.obstacle_height,
+    obstacleDepth = start.obstacle_depth;
     
     var obstacle = [
         {pos:{x:-7 * fieldWidth / 16 + obstacleWidth,y:1 * fieldHeight / 4} },
@@ -51,7 +60,7 @@ function makeObstacles(){
         {pos:{x:-1 * fieldWidth / 16 + obstacleWidth,y:-1* fieldHeight / 4} },
         {pos:{x:3 * fieldWidth / 16 + obstacleWidth,y:0.4* fieldHeight / 4} },
         {pos:{x:3 * fieldWidth / 16 + obstacleWidth,y:-0.4* fieldHeight / 4} },
-        {pos:{x:3 * fieldWidth / 16 + 2*obstacleWidth,y:-0.4* fieldHeight / 4} },
+        {pos:{x:3 * fieldWidth / 16 + 2*obstacleWidth,y:0.4* fieldHeight / 4} },
         {pos:{x:3 * fieldWidth / 16 + 2*obstacleWidth,y:-0.4* fieldHeight / 4} },
         {pos:{x:-1 * fieldWidth / 16 + obstacleWidth,y:0} },
         
@@ -67,9 +76,15 @@ function makeObstacles(){
             obstacle[i].depth = obstacleDepth;
             
         }
-        for (var i=14;i<18;i++){
+        for (var i=14;i<16;i++){
             obstacle[i].width = obstacleHeight;
             obstacle[i].height = 1.4*obstacleWidth;
+            obstacle[i].depth = obstacleDepth;
+        }
+        
+        for (var i=16;i<18;i++){
+            obstacle[i].width = obstacleHeight;
+            obstacle[i].height = 2*obstacleWidth;
             obstacle[i].depth = obstacleDepth;
         }
         
@@ -81,10 +96,20 @@ function makeObstacles(){
             
             
         }
+        
+ /*      
+       var obstacle = [{pos:{x:0,y:0}}];
+       obstacle[0].width = obstacleWidth;
+       obstacle[0].height = obstacleHeight;
+       obstacle[0].depth = obstacleDepth;
+       obstacle[0].ver_min = obstacle[0].bottom = obstacle[0].pos.y-obstacle[0].height/2;
+       obstacle[0].ver_max = obstacle[0].top = obstacle[0].pos.y + obstacle[0].height/2;
+       obstacle[0].hor_max = obstacle[0].right = obstacle[0].pos.x + obstacle[0].width/2;
+       obstacle[0].hor_min = obstacle[0].left = obstacle[0].pos.x - obstacle[0].width/2; */
         return obstacle;
     
 };
-*/
+
 document.addEventListener('mousemove', onMouseUpdate, false);
 document.addEventListener('mouseenter', onMouseUpdate, false);
 
@@ -110,12 +135,10 @@ function draw(){
 
 	logic.physics_update(logic.players.self);
         if (logic.players.self.ball.color_updated){
-            graphics.update_ball_color(true, logic.players.self.ball.color);
-            logic.players.self.ball.color_updated = false;
+            logic.players.self.ball.color_updated = ! graphics.update_ball_color(true, logic.players.self.ball.color);
         }
         if (logic.players.other.ball.color_updated) {
-            graphics.update_ball_color(false, logic.players.other.ball.color);
-            logic.players.other.ball.color_updated = false;
+            logic.players.other.ball.color_updated = ! graphics.update_ball_color(false, logic.players.other.ball.color);
         }
         graphics.renderer.render(graphics.scene, graphics.camera);
 	graphics.ballUpdate(logic.players.self.ball, logic.players.other.ball);
