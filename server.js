@@ -49,7 +49,7 @@ server.onMessage = function(player, data){
     var message = data.split('=');
     //console.log(parseFloat(message[1]));
     switch(message[0]) {
-        case 'p': var ping = 2*((Date.now() - parseFloat(message[1]))+10);
+        case 'p': var ping = 3*(Date.now() - parseFloat(message[1]));
                 //console.log(this.logic.players.self.ping);
                 
                 if (player.game.logic.server_delay<ping)
