@@ -822,10 +822,10 @@ game_logic.prototype.client_correction = function (proc_inputs) {
     this.ball_step(this.update_time - time_processed);
 	 document.getElementById("scores").innerHTML = (player.ball.pos.x-prevposx)+' - '+(player.ball.pos.y-prevposy);
 	console.log('x dif: '+(player.ball.pos.x-prevposx)+', y dif: '+(player.ball.pos.y-prevposy));
-	if (Math.abs(player.ball.pos.x-prevposx)<1.5 && Math.abs(player.ball.pos.y-prevposy)<1.5){
-		player.ball.pos.x = prevposx; player.ball.pos.y = prevposy;
-	}
-    //document.getElementById("scores").innerHTML = player.ball.pos.x + ' - ' + proc_inputs.pos.x + ' | ' + proc_inputs.time + ' - ' + debug_inc;
+//	if (Math.abs(player.ball.pos.x-prevposx)<1.5 && Math.abs(player.ball.pos.y-prevposy)<1.5){
+//		player.ball.pos.x = prevposx; player.ball.pos.y = prevposy;
+//	}
+	//document.getElementById("scores").innerHTML = player.ball.pos.x + ' - ' + proc_inputs.pos.x + ' | ' + proc_inputs.time + ' - ' + debug_inc;
 };
 
 game_logic.prototype._naive_update = function (proc_input) {
