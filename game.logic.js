@@ -7,7 +7,7 @@ var game_logic = function (game_instance) {
 	var ball_radius = 5;
     
     this.start = {
-		speed : 0.1,
+		speed : 0.2,
 		radius : ball_radius,
 		self : {
 			x : -p_width / 2 + 8 * ball_radius,
