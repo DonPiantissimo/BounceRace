@@ -884,7 +884,7 @@ var prevposy = player.ball.pos.y;
         time_processed += this.ball_step(dt);
     }
     this.ball_step(this.update_time - time_processed);
-document.getElementById("scores").innerHTML = (player.ball.pos.x-prevposx)+' - '+(player.ball.pos.y-prevposy);
+//document.getElementById("scores").innerHTML = (player.ball.pos.x-prevposx)+' - '+(player.ball.pos.y-prevposy);
 //	if (Math.abs(player.ball.pos.x-prevposx)<2 && Math.abs(player.ball.pos.y-prevposy)<2){
 //		player.ball.pos.x = prevposx; player.ball.pos.y = prevposy;
 //	}
