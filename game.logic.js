@@ -505,6 +505,11 @@ game_logic.prototype.stop_update = function(){
 };
 */
 
+game_logic.prototype.client_update = function(){
+    
+    this.intervalid = setInterval(this.physics_update.bind(this),15);
+};
+
 game_logic.prototype.server_update = function(){
     this.constants.ball_speed = this.constants.speed;
     this.launch_ball(this.players.self);
