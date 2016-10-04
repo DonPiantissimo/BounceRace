@@ -38,7 +38,7 @@ window.onload = function() {
 	graphics.create_scene();	
         graphics.setObstacles(makeObstacles(start));
         //graphics.setObstaclesOwn();
-        
+        logic.client_update();
 	draw();
 
 	
@@ -133,7 +133,7 @@ function draw(){
 //	if (logic.players.self.inputs[0])
 //		document.getElementById("scores").innerHTML = logic.players.self.inputs[logic.players.self.inputs.length-1].x + "-" + logic.players.self.inputs.length;
 
-	logic.physics_update(logic.players.self);
+	//logic.physics_update();
         if (logic.players.self.ball.color_updated){
             logic.players.self.ball.color_updated = ! graphics.update_ball_color(true, logic.players.self.ball.color);
         }
