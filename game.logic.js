@@ -885,6 +885,9 @@ var prevposy = player.ball.pos.y;
     }
     this.ball_step(this.update_time - time_processed);
 document.getElementById("scores").innerHTML = (player.ball.pos.x-prevposx)+' - '+(player.ball.pos.y-prevposy);
+	if (Math.abs(player.ball.pos.x-prevposx)<2 && Math.abs(player.ball.pos.y-prevposy)<2){
+		player.ball.pos.x = prevposx; player.ball.pos.y = prevposy;
+	}
     //document.getElementById("instructions").innerHTML = (this.debug_increment++)+'';
     //document.getElementById("scores").innerHTML = player.ball.pos.x + ' - ' + proc_inputs.pos.x + ' | ' + proc_inputs.time + ' - ' + debug_inc;
 };
