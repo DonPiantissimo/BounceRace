@@ -516,14 +516,14 @@ game_logic.prototype.server_update = function(){
     this.launch_ball(this.players.other);
     
     this.intervalid = setInterval(this.server_physics_update.bind(this),15);
-    //this.intervalid2 = setInterval(this.server_send_correction.bind(this),75);
+    this.intervalid2 = setInterval(this.server_send_correction.bind(this),75);
     this.stopped = false;
     console.log('entered server_update');
 };
 
 game_logic.prototype.stop_update = function(){
   clearInterval(this.intervalid);
-	//clearInterval(this.intervalid2);
+  clearInterval(this.intervalid2);
   this.stopped = true;
 };
 
