@@ -515,8 +515,9 @@ game_logic.prototype.server_update = function(){
     this.launch_ball(this.players.self);
     this.launch_ball(this.players.other);
     
-    this.intervalid = setInterval(this.server_physics_update.bind(this),15);
-    this.intervalid2 = setInterval(this.server_send_correction.bind(this),75);
+    //this.intervalid = setInterval(this.server_physics_update.bind(this),15);
+    //this.intervalid2 = setInterval(this.server_send_correction.bind(this),75);
+	this.server_send_correction();
     this.stopped = false;
     console.log('entered server_update');
 };
