@@ -251,8 +251,8 @@ game_graphics.prototype.ballUpdate = function(selfBall, otherBall) {
         
         
     if (this.arrowMesh.self){
-            this.arrowMesh.self.position.x = selfBall.pos.x;
-            this.arrowMesh.self.position.y = selfBall.pos.y;
+            this.arrowMesh.self.position.x = selfBall.vis_pos.x;
+            this.arrowMesh.self.position.y = selfBall.vis_pos.y;
             this.arrowMesh.self.rotation.y = selfBall.arrow.angle; 
     }
         this.ball.other.position.x = otherBall.pos.x;
