@@ -244,8 +244,8 @@ game_graphics.prototype.theCamera = function() {
 };
 
 game_graphics.prototype.ballUpdate = function(selfBall, otherBall) {
-	this.ball.self.position.x = selfBall.pos.x;
-	this.ball.self.position.y = selfBall.pos.y;
+	this.ball.self.position.x = selfBall.vis_pos.x;
+	this.ball.self.position.y = selfBall.vis_pos.y;
 	this.ball.self.rotation.z = selfBall.angle;
         
         
