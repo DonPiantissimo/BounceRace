@@ -103,6 +103,10 @@ var game_player = function (start) {
             x: start.self.x,
             y: start.self.y
         },
+        vis_pos: {
+            x: start.self.x,
+            y: start.self.y
+        },
         angle: 0,
         arrow: {
             active: false,
@@ -134,7 +138,7 @@ var game_player = function (start) {
 game_player.prototype.is_host = function(){
     this.host = true;
     //this.ball.pos.x = this.ball.old_pos.x = this.ball.temp_pos.x = -this.ball.pos.x;
-    this.ball.pos.y = this.ball.old_pos.y = this.ball.temp_pos.y = -this.ball.pos.y;
+    this.ball.pos.y = this.ball.vis_pos.y = this.ball.old_pos.y = this.ball.temp_pos.y = -this.ball.pos.y;
     
     this.ball.color = 0x6666FF;
     this.ball.color_updated = true;
@@ -147,7 +151,7 @@ game_logic.prototype.is_host = function(self){
   this.players.other.host = !self;
   if (self){
       
-      this.players.self.ball.pos.y = this.players.self.ball.old_pos.y = this.players.self.ball.temp_pos.y = this.start.self.y;
+      this.players.self.ball.pos.y = this.players.self.ball.vis_pos.y = this.players.self.ball.old_pos.y = this.players.self.ball.temp_pos.y = this.start.self.y;
       this.players.other.ball.pos.y = this.players.other.ball.old_pos.y = this.players.other.ball.temp_pos.y = this.start.other.y;
       
       this.players.self.ball.color = this.start.self.color;
@@ -155,7 +159,7 @@ game_logic.prototype.is_host = function(self){
       
   }
   else {
-      this.players.self.ball.pos.y = this.players.self.ball.old_pos.y = this.players.self.ball.temp_pos.y = this.start.other.y;
+      this.players.self.ball.pos.y = this.players.self.ball.vis_pos.y = this.players.self.ball.old_pos.y = this.players.self.ball.temp_pos.y = this.start.other.y;
       this.players.other.ball.pos.y = this.players.other.ball.old_pos.y = this.players.other.ball.temp_pos.y = this.start.self.y;
       
       this.players.self.ball.color = this.start.other.color;
@@ -474,6 +478,10 @@ game_logic.prototype.physics_update = function () {
     opponent.ball.old_pos.y = opponent.ball.pos.y;
     opponent.ball.pos.x += opponent.ball.hor_speed * dt;
     opponent.ball.pos.y += opponent.ball.ver_speed * dt;
+	
+    player.ball.vis_pos.x = player.ball.pos.x;
+    player.ball.vis_pos.y = player.ball.pos.y;
+    
     
     if (this.constants.ball_speed && player.input_log.tail){
         var host;
@@ -886,6 +894,9 @@ var prevposy = player.ball.pos.y;
     }
     this.ball_step(this.update_time - time_processed);
 document.getElementById("scores").innerHTML = (player.ball.pos.x-prevposx)+' - '+(player.ball.pos.y-prevposy);
+	if (Math.abs(player.ball.pos.x-prevposx)+Math.abs(player.ball.pos.y-prevposy)>2){
+		player.ball.vis_pos.x=player.ball.pos.x; player.ball.vis_pos.y=player.ball.pos.y;
+	}
 //	if (Math.abs(player.ball.pos.x-prevposx)<2 && Math.abs(player.ball.pos.y-prevposy)<2){
 //		player.ball.pos.x = prevposx; player.ball.pos.y = prevposy;
 //	}
