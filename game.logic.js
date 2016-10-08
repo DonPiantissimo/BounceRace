@@ -479,8 +479,8 @@ game_logic.prototype.physics_update = function () {
     opponent.ball.pos.x += opponent.ball.hor_speed * dt;
     opponent.ball.pos.y += opponent.ball.ver_speed * dt;
 	
-    player.ball.vis_pos.x = player.ball.pos.x;
-    player.ball.vis_pos.y = player.ball.pos.y;
+    player.ball.vis_pos.x += player.ball.hor_speed * dt;
+    player.ball.vis_pos.y += player.ball.ver_speed * dt;
     
     
     if (this.constants.ball_speed && player.input_log.tail){
